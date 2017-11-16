@@ -7,13 +7,50 @@
     <groupId>JavaModbusInterfaceForArduino</groupId>
     <artifactId>JavaModbusInterfaceForArduino</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>ias-snapshots</id>
+            <name>Infinite Automation Snapshot Repository</name>
+            <url>https://maven.mangoautomation.net/repository/ias-snapshot/</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ias-releases</id>
+            <name>Infinite Automation Release Repository</name>
+            <url>https://maven.mangoautomation.net/repository/ias-release/</url>
+        </repository>
+    </repositories>
 
    <dependencies>
-    <dependency>
-        <groupId>net.wimpi</groupId>
-        <artifactId>jamod</artifactId>
-        <version>1.2</version>
-    </dependency>
+       <dependency>
+           <groupId>com.infiniteautomation</groupId>
+           <artifactId>modbus4j</artifactId>
+           <version>3.0.3</version>
+       </dependency>
    </dependencies>
 
 </project>
