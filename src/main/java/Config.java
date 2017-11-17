@@ -3,10 +3,10 @@ public class Config {
     public final static int OWN_SLAVE_ID=202;
     public static final int PORT = 5555;
 
-    public static final String CONTROLLER_IP = "192.168.1.111";//"192.168.1.69";
+    public static final String CONTROLLER_IP = "192.168.1.115";//"192.168.1.69";
     public static final int CONTROLLER_SLAVE_ID=111;
 
-    public static final String LOGGER_IP = "192.168.1.111";//"192.168.1.222";
+    public static final String LOGGER_IP = "192.168.1.115";//"192.168.1.222";
     public static final int LOGGER_SLAVE_ID=222;
 
     public static final int T_ZCO_REGISTER= 200;

@@ -3,6 +3,12 @@ import com.serotonin.modbus4j.exception.IllegalDataAddressException;
 import com.serotonin.modbus4j.exception.ModbusInitException;
 import com.serotonin.modbus4j.ip.tcp.TcpSlave;
 
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,9 +34,10 @@ public class ModbusInterface {
     private static int Fcob; //#422
     private static int Ub2; //#424
     private static int Tr;//#426
+    private static String time;
 
     public static String toStringStatic() {
-        return "time_0: " + time_0 + " time_1: " + time_1 + " time_flag: " + time_flag + " Tzco: " + Tzco + " Tcob: " + Tcob + " Fcob: " + Fcob + " Ub2: " + Ub2 + " Tr: " + Tr + " To: " + To;
+        return "time " + time + " time_flag: " + time_flag + " To: " + To+ " Tzco: " + Tzco + " Tcob: " + Tcob + " Fcob: " + Fcob + " Ub2: " + Ub2 + " Tr: " + Tr ;
     }
 
     public static void main(String[] args) {
@@ -57,14 +64,20 @@ public class ModbusInterface {
                         time_flag = basicProcImage.getCoil(0);
                         if (time_flag == true) {
                             getRegistersValue();
+                            Tcob= ThreadLocalRandom.current().nextInt(27315, 37315);
+                            Fcob= ThreadLocalRandom.current().nextInt(278, 11111);
+                            Ub2=ThreadLocalRandom.current().nextInt(0,100);
+                            Tr= ThreadLocalRandom.current().nextInt(27315,30315);
                             master.sendDataToController(Tcob, Fcob);
                             master.sendDataToLogger(Tcob, Fcob, Ub2, Tr);
+                            time_flag=false;
+                            System.out.println(toStringStatic());
                         }
 
                     } catch (IllegalDataAddressException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(toStringStatic());
+
                 }
             }
         }).start();
@@ -81,7 +94,11 @@ public class ModbusInterface {
         Ub2 = basicProcImage.getHoldingRegister(Config.UB_REGISTER);
         Tr = basicProcImage.getHoldingRegister(Config.T_R_REGISTER);
         To = basicProcImage.getHoldingRegister(Config.T_O_REGISTER);
+        int timeStamp = time_1 + time_0 * 65536;
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
+        time = sdf.format(new Date((long) timeStamp * 1000));
     }
 
     private static TcpSlave initSlave(){
