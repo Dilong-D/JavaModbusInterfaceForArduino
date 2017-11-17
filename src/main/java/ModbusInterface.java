@@ -3,8 +3,6 @@ import com.serotonin.modbus4j.exception.IllegalDataAddressException;
 import com.serotonin.modbus4j.exception.ModbusInitException;
 import com.serotonin.modbus4j.ip.tcp.TcpSlave;
 
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -17,16 +15,6 @@ public class ModbusInterface {
     private static BasicProcessImage basicProcImage;
 
 
-    /*
-        1. Zegar (Mieszko) wpisuje do mojego rejestru (#0) czas.
-        2. Zegar (Mieszko) wpisuje do mojego rejestru flagi gotowości (#0).
-        3. Zegar (Mieszko) czyta z rejestru flage gotowosci
-        4. Wymiennik(Michaly) wpisuje do budynków temperature wody w systemie(#200 - Tzco - woda wchodzaca do budynku).
-        5. Budynek(Ja) wpisuje regulatorowi(Mariusz) rejestry (#420 - Tcob - woda wychodzaca z budynku i #422 - Fcob - strumien wody wychodzacej).
-        6. Budynek(Ja) wpisuje Loggerowi (Jędrzej) (#420 - Tcob - woda wychodzaca z budynku, #422 - Fcob - strumien wody wychodzacej i #424 - Ub2 - stopien otwarcia zaworów i #426- Tr-temp budynku)).
-     */
-    private static int time_0; //#0
-    private static int time_1;//#1
     private static boolean time_flag;//#0
     private static int To;//#100
     private static int Tzco; //#200
@@ -36,7 +24,7 @@ public class ModbusInterface {
     private static int Tr;//#426
     private static String time;
 
-    public static String toStringStatic() {
+    private static String toStringStatic() {
         return "time " + time + " time_flag: " + time_flag + " To: " + To+ " Tzco: " + Tzco + " Tcob: " + Tcob + " Fcob: " + Fcob + " Ub2: " + Ub2 + " Tr: " + Tr ;
     }
 
@@ -62,7 +50,7 @@ public class ModbusInterface {
                 while (true) {
                     try {
                         time_flag = basicProcImage.getCoil(0);
-                        if (time_flag == true) {
+                        if (time_flag) {
                             getRegistersValue();
                             Tcob= ThreadLocalRandom.current().nextInt(27315, 37315);
                             Fcob= ThreadLocalRandom.current().nextInt(278, 11111);
@@ -86,8 +74,8 @@ public class ModbusInterface {
 
     private static void getRegistersValue() throws IllegalDataAddressException {
         time_flag = basicProcImage.getCoil(Config.TIMER_FLAG_REGISTER);
-        time_0 = basicProcImage.getHoldingRegister(Config.TIMER_0_REGISTER);
-        time_1 = basicProcImage.getHoldingRegister(Config.TIMER_1_REGISTER);
+        int time_0 = basicProcImage.getHoldingRegister(Config.TIMER_0_REGISTER);
+        int time_1 = basicProcImage.getHoldingRegister(Config.TIMER_1_REGISTER);
         Tzco = basicProcImage.getHoldingRegister(Config.T_ZCO_REGISTER);
         Tcob = basicProcImage.getHoldingRegister(Config.T_COB_REGISTER);
         Fcob = basicProcImage.getHoldingRegister(Config.F_COB_REGISTER);
